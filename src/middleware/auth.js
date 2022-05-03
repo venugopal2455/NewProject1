@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const { blog } = require("../controller/blogCreate");
-const authorModel = require("../model/authorModel");
-const blogModel = require("../model/blogModel");
+const { blog } = require("../controllers/blogController");
+//const authorModel = require("../models/authorModel");
+const blogModel = require("../models/blogModel");
 
 
 // ===================    Authentication   ====================================
@@ -10,7 +10,7 @@ let authentication = async function (req, res, next) {
         let token = req.headers['x-api-key'];
         if (!token) return res.status(400).send({ status: false, message: "Please Enter your Given Token if not then login first" });
         let decode = jwt.verify(token, "Group-5");
-        if (!decode) return res.status(400).send({ status: false, message: "Your are not Authenticate to Enter" })
+        if (!decode) return res.status(401).send({ status: false, message: "Your are not Authenticate to Enter" })
         next()
     } catch (err) {
         res.status(500).send({ status: false, message: err.message });
@@ -32,7 +32,7 @@ let authorisation = async function (req, res, next) {
         if (!decode) return res.status(400).send({ status: false, message: "inavalid token" })
         let logged = decode.userId
 
-        if (logged != autherid) return res.status(400).send({ status: false, message: "You are not Autherizse to make changes" })
+        if (logged != autherid) return res.status(401).send({ status: false, message: "You are not Autherizse to make changes" })
         next()
     } catch (err) {
         res.status(500).send({ status: false, message: err.message });

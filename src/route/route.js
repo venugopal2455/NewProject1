@@ -1,29 +1,28 @@
 const express = require("express")
 
 const router = express.Router();
-const controller = require("../controller/controller");
-const authorController = require("../controller/authorCreate")
-const blogController = require("../controller/blogCreate")
-const loginController = require("../controller/login")
-const updatecontroller = require("../controller/blogs")
+
+const authorController = require("../controllers/authorController")
+const blogController = require("../controllers/blogController")
+
 const middleware = require("../middleware/auth")
 
 
 
 
-router.post("/authors", authorController.author);
+router.post("/authors", authorController.registerAuthor);
 
-router.post("/blogs", middleware.authentication, blogController.blog);
+router.post("/blogs", middleware.authentication, blogController.createblog);
 
-router.get("/blogs", middleware.authentication, controller.getblog);
+router.get("/blogs", middleware.authentication, blogController.getblog);
 
-router.delete("/blogs/:blogId", middleware.authentication, middleware.authorisation, controller.deleted);
+router.delete("/blogs/:blogId", middleware.authentication, middleware.authorisation, blogController.deleted);
 
-router.delete("/blogs", middleware.authentication, middleware.md3, controller.deletequery);
+router.delete("/blogs", middleware.authentication, middleware.md3, blogController.deletequery);
 
-router.put("/blogs/:blogId", middleware.authentication, middleware.authorisation, updatecontroller.updateBlog);
+router.put("/blogs/:blogId", middleware.authentication, middleware.authorisation, blogController.updateBlog);
 
-router.post("/login", loginController.login);
+router.post("/login", authorController.loginAuthor);
 
 
 
